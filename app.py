@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-  return "Hello, Arnold."
+  return "Hello, wolf."
 
 @app.route('/<int:number>')
 def lucky_draw(number):

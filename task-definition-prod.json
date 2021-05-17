@@ -64,7 +64,7 @@
       "EC2",
       "FARGATE"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-west-2:178027395537:task-definition/prod-twang69:1",
+    "taskDefinitionArn": "arn:aws:ecs:us-west-2:178027395537:task-definition/prod-twang69:2",
     "family": "prod-twang69",
     "requiresAttributes": [
       {
@@ -134,7 +134,7 @@
     ],
     "networkMode": "awsvpc",
     "cpu": "256",
-    "revision": 1,
+    "revision": 2,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,

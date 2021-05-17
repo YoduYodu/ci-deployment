@@ -109,4 +109,31 @@ jobs:
           API_URL: http://dev-twang69-156489589.us-west-2.elb.amazonaws.com/
         run: |
           pytest lucky-draw-features.py
+
+      - name: Docker build and push to prod
+        id: build-image-prod
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: prod-twang69
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          
+      - name: Update task definition prod
+        id: task-def-prod
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition-prod.json
+          container-name: prod-twang69
+          image: ${{ steps.build-image-prod.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition prod
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-prod.outputs.task-definition }}
+          service: prod-twang69
+          cluster: prod-twang69
+          wait-for-service-stability: true
           

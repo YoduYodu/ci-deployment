@@ -23,6 +23,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -43,8 +44,8 @@ jobs:
         run: |
           pytest
 
-  gherkin:
-    name: gherkin test
+  aws-dev:
+    name: aws dev
     runs-on: ubuntu-latest
 
     steps:
@@ -91,3 +92,35 @@ jobs:
           service: dev-twang69
           cluster: dev-twang69
           wait-for-service-stability: true
+
+  gherkin-test:
+    name: Gherkin test on features
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+  
+      - name: Test Gherkin
+        env:
+          API_URL: http://dev-twang69-156489589.us-west-2.elb.amazonaws.com/
+        run: |
+          pytest lucky-draw-features.py
+        
+    
+
+          

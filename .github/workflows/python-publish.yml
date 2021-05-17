@@ -44,8 +44,8 @@ jobs:
         run: |
           pytest
 
-  aws-dev:
-    name: aws dev
+  aws:
+    name: aws
     runs-on: ubuntu-latest
 
     steps:
@@ -93,17 +93,6 @@ jobs:
           cluster: dev-twang69
           wait-for-service-stability: true
 
-  gherkin-test:
-    name: Gherkin test on features
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.9]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -120,7 +109,4 @@ jobs:
           API_URL: http://dev-twang69-156489589.us-west-2.elb.amazonaws.com/
         run: |
           pytest lucky-draw-features.py
-        
-    
-
           
